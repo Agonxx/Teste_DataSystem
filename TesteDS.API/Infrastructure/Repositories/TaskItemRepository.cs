@@ -86,7 +86,7 @@ namespace TesteDS.API.Infrastructure.Repositories
                 WorkerId = taskItemObj.WorderId,
                 Title = taskItemObj.Title,
                 Description = taskItemObj.Description,
-                Status = taskItemObj.FinishedAt != null ? Domain.Enums.EStatus.Completed : taskItemObj.Status,
+                Status = taskItemObj.FinishedAt != null ? EStatus.Completed : taskItemObj.Status,
                 CreateAt = taskItemObj.CreateAt,
                 UpdateAt = DateTime.Now,
                 FinishedAt = taskItemObj.FinishedAt
