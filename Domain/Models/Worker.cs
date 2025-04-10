@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
+﻿using TesteDS.Domain.Enums;
 
-namespace Domain.Models
+namespace TesteDS.Domain.Models
 {
     public class Worker
     {

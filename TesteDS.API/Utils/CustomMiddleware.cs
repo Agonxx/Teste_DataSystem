@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using System.Text.Json;
-using Domain.Utils;
+using TesteDS.Domain.Utils;
 
 namespace TesteDS.API.Utils
 {

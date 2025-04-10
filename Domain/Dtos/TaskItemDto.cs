@@ -1,7 +1,7 @@
-﻿using Domain.Enums;
-using FluentValidation;
+﻿using FluentValidation;
+using TesteDS.Domain.Enums;
 
-namespace Domain.Dtos
+namespace TesteDS.Domain.Dtos
 {
     public class TaskItemDto
     {

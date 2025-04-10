@@ -36,25 +36,27 @@
 									Data="@(ListWorkers)" TextProperty="@nameof(WorkerDto.Name)" ValueProperty="@nameof(WorkerDto.Id)" />
 				</RadzenColumn>
 
-				@if (TaskObj.Id > 0)
-				{
-					@if (TaskObj.Status == EStatus.Pending)
+				<RadzenColumn Size="12" SizeSM="6" Style="display:flex; justify-content:end">
+					@if (TaskObj.Id > 0)
 					{
-						<RadzenColumn Size="12" SizeSM="6" Style="display:flex; justify-content:end">
-							<RadzenButton Icon="done" title="Finalizar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="StartTask" @onclick:stopPropagation="true">
-								Iniciar
-							</RadzenButton>
-						</RadzenColumn>
+						<RadzenStack Style="width: 100%;" JustifyContent="JustifyContent.End" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="10px">
+
+							@if (TaskObj.Status == EStatus.Pending)
+							{
+								<RadzenButton title="Iniciar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="StartTask" Style="width: 100px;" @onclick:stopPropagation="true">
+									Iniciar
+								</RadzenButton>
+							}
+
+							@if (TaskObj.Status != EStatus.Completed)
+							{
+								<RadzenButton title="Finalizar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="FinishTask" Style="width: 100px;" @onclick:stopPropagation="true">
+									Finalizar
+								</RadzenButton>
+							}
+						</RadzenStack>
 					}
-					else if (TaskObj.Status == EStatus.InProgress)
-					{
-						<RadzenColumn Size="12" SizeSM="6" Style="display:flex; justify-content:end">
-							<RadzenButton Icon="done" title="Finalizar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="FinishTask" @onclick:stopPropagation="true">
-								Finalizar
-							</RadzenButton>
-						</RadzenColumn>
-					}
-				}
+				</RadzenColumn>
 			</RadzenRow>
 		</RadzenStack>
 
@@ -86,7 +88,7 @@
 	private async Task GetById(int taskId)
 	{
 		ActionButton = "Atualizar";
-		var ret = await _taskItemService.GetById(taskId);
+		TaskObj = await _taskItemService.GetById(taskId);
 	}
 
 	private async Task StartTask()

@@ -1,9 +1,9 @@
-﻿using Domain.Dtos;
-using Domain.Enums;
-using Domain.Models;
-using Domain.Utils;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TesteDS.API.Infrastructure.DataBase;
+using TesteDS.Domain.Dtos;
+using TesteDS.Domain.Enums;
+using TesteDS.Domain.Models;
+using TesteDS.Domain.Utils;
 
 namespace TesteDS.API.Infrastructure.Repositories
 {

@@ -1,6 +1,6 @@
-﻿using Domain.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TesteDS.API.Infrastructure.DataBase.ContextConfig;
+using TesteDS.Domain.Models;
 
 namespace TesteDS.API.Infrastructure.DataBase
 {

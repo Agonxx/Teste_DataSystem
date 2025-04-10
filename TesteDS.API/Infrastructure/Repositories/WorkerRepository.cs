@@ -1,6 +1,6 @@
-﻿using Domain.Dtos;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using TesteDS.API.Infrastructure.DataBase;
+using TesteDS.Domain.Dtos;
 
 namespace TesteDS.API.Infrastructure.Repositories
 {

@@ -1,4 +1,4 @@
-﻿using Domain.Dtos;
+﻿using TesteDS.Domain.Dtos;
 
 namespace TesteDS.Blazor.Services.Interfaces
 {

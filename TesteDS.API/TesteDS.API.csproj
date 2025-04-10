@@ -21,11 +21,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Infrastructure\DataBase\Migrations\" />
 		<Folder Include="Properties\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Domain\Domain.csproj" />
+	  <ProjectReference Include="..\Domain\TesteDS.Domain.csproj" />
 	</ItemGroup>
 
 </Project>

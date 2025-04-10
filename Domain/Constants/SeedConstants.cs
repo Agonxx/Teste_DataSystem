@@ -1,4 +1,4 @@
-﻿namespace Domain.Constants
+﻿namespace TesteDS.Domain.Constants
 {
     public static class SeedConstants
     {

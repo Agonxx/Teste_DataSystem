@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using Domain.Enums;
+using TesteDS.Domain.Enums;
 
-namespace Domain.Utils
+namespace TesteDS.Domain.Utils
 {
     public static class EnumsEx
     {

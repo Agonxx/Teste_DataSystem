@@ -1,7 +1,7 @@
-﻿using Domain.Enums;
-using Domain.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TesteDS.Domain.Enums;
+using TesteDS.Domain.Models;
 
 namespace TesteDS.API.Infrastructure.DataBase.ContextConfig
 {

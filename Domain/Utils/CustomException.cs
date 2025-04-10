@@ -1,5 +1,4 @@
-﻿
-namespace Domain.Utils
+﻿namespace TesteDS.Domain.Utils
 {
     public class CustomException : Exception
     {

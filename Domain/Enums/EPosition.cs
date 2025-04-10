@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Domain.Enums
+namespace TesteDS.Domain.Enums
 {
     public enum EPosition
     {

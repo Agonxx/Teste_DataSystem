@@ -1,7 +1,7 @@
-using Domain.Dtos;
-using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using TesteDS.API.Application;
+using TesteDS.Domain.Dtos;
+using TesteDS.Domain.Models;
 
 namespace TesteDS.API.Presentation;
 

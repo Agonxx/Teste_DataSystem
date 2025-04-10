@@ -1,7 +1,7 @@
-﻿using Domain.Dtos;
-using Domain.Models;
-using TesteDS.Blazor.Services.Interfaces;
+﻿using TesteDS.Blazor.Services.Interfaces;
 using TesteDS.Blazor.Utils;
+using TesteDS.Domain.Dtos;
+using TesteDS.Domain.Models;
 
 namespace TesteDS.Blazor.Services
 {

@@ -1,5 +1,5 @@
-﻿using Domain.Dtos;
-using TesteDS.API.Infrastructure.Repositories;
+﻿using TesteDS.API.Infrastructure.Repositories;
+using TesteDS.Domain.Dtos;
 
 namespace TesteDS.API.Application
 {

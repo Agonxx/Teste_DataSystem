@@ -1,6 +1,6 @@
-﻿using Domain.Enums;
+﻿using TesteDS.Domain.Enums;
 
-namespace Domain.Dtos
+namespace TesteDS.Domain.Dtos
 {
     public class WorkerDto
     {
