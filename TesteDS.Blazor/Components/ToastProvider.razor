@@ -1,0 +1,14 @@
+﻿@using Radzen
+@using Radzen.Blazor
+
+@inject NotificationService NotificationService
+@inject ToastBase Toast
+
+<RadzenNotification />
+
+@code {
+    protected override void OnInitialized()
+    {
+        Toast.Init(NotificationService);
+    }
+}

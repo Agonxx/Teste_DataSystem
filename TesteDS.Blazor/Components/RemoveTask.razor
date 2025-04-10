@@ -1,0 +1,55 @@
+﻿@using Domain.Dtos
+@using Radzen
+@using Radzen.Blazor
+@using TesteDS.Blazor.Services.Interfaces
+
+@inject Radzen.DialogService dialogService
+@inject ITaskItemService _taskItemService
+@inject IWorkerService _workerService
+@inject ToastBase _toast
+
+@if (Initialized)
+{
+	<RadzenStack Gap="0.5rem" Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Style="padding: 0 1rem; max-width:500px;">
+		<RadzenCard Variant="Variant.Filled">
+			<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" class="rz-p-4">
+				<RadzenStack Gap="0">
+					<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Título</RadzenText>
+					<RadzenText TextStyle="TextStyle.Body1"><b>@(TaskObj.Title)</b></RadzenText>
+					<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Colaborador</RadzenText>
+					<RadzenText TextStyle="TextStyle.Body1"><b>@(TaskObj.WorderName)</b></RadzenText>
+					<RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Criada em</RadzenText>
+					<RadzenText TextStyle="TextStyle.Body1"><b>@(TaskObj.CreateAt.ToString("dd/MM/yyyy HH:mm"))</b></RadzenText>
+				</RadzenStack>
+			</RadzenStack>
+		</RadzenCard>
+
+		<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem" Style="margin-top:30px">
+			<RadzenButton Click="@Close" Variant="Variant.Flat" Text="Cancelar" Style="width: 120px;" />
+			<RadzenButton Click="@OnSubmit" Variant="Variant.Flat" Text="Excluir" Style="width: 120px;" />
+		</RadzenStack>
+	</RadzenStack>
+}
+
+@code {
+	[Parameter] public TaskItemDto TaskObj { get; set; } = new();
+	public bool Initialized { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		Initialized = true;
+	}
+
+	private async Task OnSubmit()
+	{
+		await _taskItemService.DeleteById(TaskObj.Id);
+		_toast.Success("Tarefa excluída com sucesso");
+		await Close();
+	}
+
+	private async Task Close(object result = null)
+	{
+		dialogService.Close(result);
+		StateHasChanged();
+	}
+}

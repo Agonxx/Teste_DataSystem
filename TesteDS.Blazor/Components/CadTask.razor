@@ -1,0 +1,142 @@
+﻿@using Domain.Dtos
+@using Domain.Enums
+@using Radzen
+@using Radzen.Blazor
+@using TesteDS.Blazor.Services.Interfaces
+
+@inject Radzen.DialogService dialogService
+@inject ITaskItemService _taskItemService
+@inject IWorkerService _workerService
+@inject ToastBase _toast
+
+@if (Initialized)
+{
+	<RadzenStack Gap="0.5rem" Orientation="Orientation.Vertical" JustifyContent="JustifyContent.SpaceBetween" Style="padding: 0 1rem;">
+
+		<RadzenStack Style="width: 100%;">
+			<RadzenRow JustifyContent="JustifyContent.SpaceBetween">
+				<RadzenColumn Size="12" SizeSM="12">
+					<RadzenFormField Text="Título" Variant="Variant.Outlined" Style="width: 100%;">
+						<RadzenTextBox @bind-Value="@TaskObj.Title" Disabled="@(TaskObj.Status == EStatus.Completed)" Placeholder="Insira um título" Style="width: 100%;" />
+					</RadzenFormField>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow>
+				<RadzenColumn Size="12" SizeSM="12">
+					<RadzenFormField Text="Descrição" Variant="Variant.Outlined" Style="width: 100%;">
+						<RadzenTextArea @bind-Value="@TaskObj.Description" Disabled="@(TaskObj.Status == EStatus.Completed)" Placeholder="Insira a descrição da tarefa(OPCIONAL)" Rows="4" />
+					</RadzenFormField>
+				</RadzenColumn>
+			</RadzenRow>
+
+			<RadzenRow JustifyContent="JustifyContent.SpaceEvenly">
+				<RadzenColumn Size="12" SizeSM="6">
+					<RadzenDropDown Style="width: 100%;" Disabled="@(TaskObj.Id > 0)" TValue="int" @bind-Value="TaskObj.WorderId" Placeholder="Selecione o colaborador" AllowFiltering="true"
+									Data="@(ListWorkers)" TextProperty="@nameof(WorkerDto.Name)" ValueProperty="@nameof(WorkerDto.Id)" />
+				</RadzenColumn>
+
+				@if (TaskObj.Id > 0)
+				{
+					@if (TaskObj.Status == EStatus.Pending)
+					{
+						<RadzenColumn Size="12" SizeSM="6" Style="display:flex; justify-content:end">
+							<RadzenButton Icon="done" title="Finalizar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="StartTask" @onclick:stopPropagation="true">
+								Iniciar
+							</RadzenButton>
+						</RadzenColumn>
+					}
+					else if (TaskObj.Status == EStatus.InProgress)
+					{
+						<RadzenColumn Size="12" SizeSM="6" Style="display:flex; justify-content:end">
+							<RadzenButton Icon="done" title="Finalizar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="FinishTask" @onclick:stopPropagation="true">
+								Finalizar
+							</RadzenButton>
+						</RadzenColumn>
+					}
+				}
+			</RadzenRow>
+		</RadzenStack>
+
+		<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly" Style="margin-top:30px">
+			<RadzenButton Click="@Close" Variant="Variant.Flat" Text="Fechar" Style="width: 120px;" />
+			@if (TaskObj.Status != EStatus.Completed)
+			{
+				<RadzenButton Click="@OnSubmit" Variant="Variant.Flat" Text="@ActionButton" Style="width: 120px;" />
+			}
+		</RadzenStack>
+	</RadzenStack>
+}
+
+@code {
+	[Parameter] public TaskItemDto TaskObj { get; set; } = new();
+	public bool Initialized { get; set; }
+	public List<WorkerDto> ListWorkers { get; set; } = new();
+	private string ActionButton { get; set; } = "Cadastrar";
+
+	protected override async Task OnInitializedAsync()
+	{
+		ListWorkers = await _workerService.GetAll();
+		if (TaskObj.Id > 0)
+			await GetById(TaskObj.Id);
+
+		Initialized = true;
+	}
+
+	private async Task GetById(int taskId)
+	{
+		ActionButton = "Atualizar";
+		var ret = await _taskItemService.GetById(taskId);
+	}
+
+	private async Task StartTask()
+	{
+		TaskObj.Status = EStatus.InProgress;
+		await _taskItemService.UpdateStatus(TaskObj);
+
+		_toast.Success($"Sucesso ao iniciar tarefa");
+	}
+
+	private async Task FinishTask()
+	{
+		TaskObj.Status = EStatus.Completed;
+		TaskObj.FinishedAt = DateTime.Now;
+		await _taskItemService.UpdateStatus(TaskObj);
+
+		_toast.Success($"Sucesso ao finalizar tarefa");
+	}
+
+	private async Task OnSubmit()
+	{
+		if (!await CadTaskDtoValidator())
+			return;
+
+		if (TaskObj.Id > 0)
+			await _taskItemService.Update(TaskObj);
+		else
+			await _taskItemService.Create(TaskObj);
+
+		_toast.Success($"Sucesso ao {ActionButton} tarefa");
+		await Close();
+	}
+
+	public async Task<bool> CadTaskDtoValidator()
+	{
+		var validator = new TaskItemDtoValidator();
+		var result = validator.Validate(TaskObj);
+
+		if (!result.IsValid)
+		{
+			foreach (var error in result.Errors)
+				_toast.Error(error.ErrorMessage);
+		}
+
+		return result.IsValid;
+	}
+
+	private async Task Close(object result = null)
+	{
+		dialogService.Close(result);
+		StateHasChanged();
+	}
+}

@@ -1,0 +1,150 @@
+﻿@page "/"
+@using Domain.Dtos
+@using Domain.Enums
+@using Domain.Utils
+@using Radzen
+@using Radzen.Blazor
+@using TesteDS.Blazor.Components
+@using TesteDS.Blazor.Services.Interfaces
+@using TesteDS.Blazor.Utils
+@using static Domain.Utils.EnumsEx
+
+@inject ITaskItemService _taskItemService
+@inject IWorkerService _workerService
+@inject ToastBase Toast
+@inject DialogBase _dialogService
+
+<PageTitle>Home</PageTitle>
+
+@if (Initialized)
+{
+	<RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="10px;">
+
+		<RadzenStack Style="width:100%" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="5px;" JustifyContent="JustifyContent.Center">
+			<h2>TAREFAS</h2>
+		</RadzenStack>
+
+		<RadzenStack Style="width:100%" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="5px;" JustifyContent="JustifyContent.SpaceBetween">
+
+			<RadzenStack Style="width:50%" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Gap="5px;" JustifyContent="JustifyContent.Start">
+					<RadzenDropDown @bind-Value="SelectedWorker" Data=@WorkerList TValue="WorkerDto" AllowClear="true"
+									TextProperty="@(nameof(WorkerDto.Name))" Change=@(Filter) Style="max-width: 400px;" Placeholder="Colaborador" />
+
+					<RadzenDropDown @bind-Value="SelectedStatus" Data=@StatusList TValue="StatusFilter" AllowClear="true"
+									TextProperty="@(nameof(StatusFilter.EDescription))" Change=@(Filter) Style="max-width: 400px;" Placeholder="Status" />
+			</RadzenStack>
+
+			<RadzenButton Icon="add" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="AddTask" @onclick:stopPropagation="true">
+				Nova Tarefa
+			</RadzenButton>
+		</RadzenStack>
+
+		<RadzenDataGrid @ref="DataGrid" Data="@TaskListFilter" AllowSorting="true" PageSize="10" AllowPaging="true" ShowPagingSummary="true">
+			<Columns>
+				<RadzenDataGridColumn Property="@nameof(TaskItemDto.WorderName)" Title="Colaborador" TextAlign="TextAlign.Center" Width="120px" />
+				<RadzenDataGridColumn Property="@nameof(TaskItemDto.Title)" Title="Título" TextAlign="TextAlign.Center" Width="350px" />
+				<RadzenDataGridColumn Property="@nameof(TaskItemDto.Status)" Title="Status" TextAlign="TextAlign.Center" Width="100px">
+					<Template>
+						@(context.Status.GetDescription())
+					</Template>
+				</RadzenDataGridColumn>
+				<RadzenDataGridColumn Property="@nameof(TaskItemDto.CreateAt)" Title="Criada em" FormatString="{0:dd/MM/yyyy HH:mm}" TextAlign="TextAlign.Center" Width="120px" />
+				<RadzenDataGridColumn Property="@nameof(TaskItemDto.UpdateAt)" Title="Atualizado em" FormatString="{0:dd/MM/yyyy HH:mm}" TextAlign="TextAlign.Center" Width="120px" />
+				<RadzenDataGridColumn Context="taskItem" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+					<Template Context="taskItem">
+						<RadzenButton Icon="edit" title="Editar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => EditTask(taskItem))" @onclick:stopPropagation="true" />
+						<RadzenButton Icon="delete" title="Excluir" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => RemoveTask(taskItem))" @onclick:stopPropagation="true" />
+					</Template>
+				</RadzenDataGridColumn>
+			</Columns>
+		</RadzenDataGrid>
+	</RadzenStack>
+}
+
+@code {
+	private RadzenDataGrid<TaskItemDto> DataGrid;
+	public List<TaskItemDto> TaskList { get; set; } = new();
+	public List<TaskItemDto> TaskListFilter { get; set; } = new();
+	public List<WorkerDto> WorkerList { get; set; } = new();
+	private List<StatusFilter> StatusList { get; set; } = new();
+	public StatusFilter SelectedStatus { get; set; }
+	public WorkerDto SelectedWorker { get; set; }
+	private bool Initialized { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		await GetAllTasks();
+		await GetAllFilters();
+		Initialized = true;
+	}
+
+	public async Task AddTask()
+	{
+		await _dialogService.AbrirDialog("Cadastrar Tarefa", @<CadTask />, "600px");
+		await GetAllTasks();
+	}
+
+	public async Task Filter()
+	{
+		TaskListFilter.Clear();
+		List<TaskItemDto> finalList = new();
+		finalList.AddRange(TaskList);
+
+		if (SelectedWorker != null)
+			finalList = finalList.Where(w => w.WorderId == SelectedWorker.Id).ToList();
+
+		if (SelectedStatus != null)
+			finalList = finalList.Where(w => w.Status == SelectedStatus.EValue).ToList();
+
+		TaskListFilter.AddRange(finalList);
+
+		await RefreshGrid();
+	}
+
+	public async Task EditTask(TaskItemDto taskItem)
+	{
+		await _dialogService.AbrirDialog("Detalhes da Tarefa", @<CadTask TaskObj="taskItem" />, "600px");
+		await GetAllTasks();
+	}
+
+	public async Task RemoveTask(TaskItemDto taskItem)
+	{
+		await _dialogService.AbrirDialog("Excluir Tarefa", @<RemoveTask TaskObj="taskItem" />);
+		await GetAllTasks();
+	}
+
+	public async Task GetAllTasks()
+	{
+		TaskList.Clear();
+		TaskListFilter.Clear();
+
+		TaskList = await _taskItemService.GetAll();
+		TaskListFilter.AddRange(TaskList);
+
+		await RefreshGrid();
+	}
+
+	public async Task GetAllFilters()
+	{
+		WorkerList = await _workerService.GetAll();
+		var listEnum = EnumsEx.ToListDescription<EStatus>();
+		listEnum.ForEach(w =>
+		{
+			var newItem = new StatusFilter()
+				{
+					EValue = w.Value,
+					EDescription = w.Text
+				};
+
+			StatusList.Add(newItem);
+		});
+	}
+
+	private async Task RefreshGrid()
+	{
+		if (DataGrid != null)
+			await DataGrid.Reload();
+
+		StateHasChanged();
+	}
+}
