@@ -21,20 +21,20 @@
 	<RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Gap="10px;">
 
 		<RadzenStack Style="width:100%" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="5px;" JustifyContent="JustifyContent.Center">
-			<h2>TAREFAS</h2>
+			<h2 style="color: lightgray;">TAREFAS</h2>
 		</RadzenStack>
 
 		<RadzenStack Style="width:100%" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="5px;" JustifyContent="JustifyContent.SpaceBetween">
 
 			<RadzenStack Style="width:50%" Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Gap="5px;" JustifyContent="JustifyContent.Start">
-					<RadzenDropDown @bind-Value="SelectedWorker" Data=@WorkerList TValue="WorkerDto" AllowClear="true"
-									TextProperty="@(nameof(WorkerDto.Name))" Change=@(Filter) Style="max-width: 400px;" Placeholder="Colaborador" />
+				<RadzenDropDown @bind-Value="SelectedWorker" Data=@WorkerList TValue="WorkerDto" AllowClear="true"
+								TextProperty="@(nameof(WorkerDto.Name))" Change=@(Filter) Style="max-width: 400px;" Placeholder="Colaborador" />
 
-					<RadzenDropDown @bind-Value="SelectedStatus" Data=@StatusList TValue="StatusFilter" AllowClear="true"
-									TextProperty="@(nameof(StatusFilter.EDescription))" Change=@(Filter) Style="max-width: 400px;" Placeholder="Status" />
+				<RadzenDropDown @bind-Value="SelectedStatus" Data=@StatusList TValue="StatusFilter" AllowClear="true"
+								TextProperty="@(nameof(StatusFilter.EDescription))" Change=@(Filter) Style="max-width: 400px;" Placeholder="Status" />
 			</RadzenStack>
 
-			<RadzenButton Icon="add" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="AddTask" @onclick:stopPropagation="true">
+			<RadzenButton Icon="add" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="AddTask" @onclick:stopPropagation="true">
 				Nova Tarefa
 			</RadzenButton>
 		</RadzenStack>
@@ -42,25 +42,31 @@
 		<RadzenDataGrid @ref="DataGrid" Data="@TaskListFilter" AllowSorting="true" PageSize="10" AllowPaging="true" ShowPagingSummary="true">
 			<Columns>
 				<RadzenDataGridColumn Property="@nameof(TaskItemDto.WorderName)" Title="Colaborador" TextAlign="TextAlign.Center" Width="120px" />
-				<RadzenDataGridColumn Property="@nameof(TaskItemDto.Title)" Title="Título" TextAlign="TextAlign.Center" Width="350px" />
-				<RadzenDataGridColumn Property="@nameof(TaskItemDto.Status)" Title="Status" TextAlign="TextAlign.Center" Width="100px">
+				<RadzenDataGridColumn Property="@nameof(TaskItemDto.Title)" Title="Título" TextAlign="TextAlign.Center" Width="300px" />
+				<RadzenDataGridColumn Property="@nameof(TaskItemDto.Status)" Title="Status" TextAlign="TextAlign.Center" Width="120px">
 					<Template>
-						@(context.Status.GetDescription())
+						<span class="status @(context.Status.ToString())">
+							@(context.Status.GetDescription())
+						</span>
 					</Template>
 				</RadzenDataGridColumn>
 				<RadzenDataGridColumn Property="@nameof(TaskItemDto.CreateAt)" Title="Criada em" FormatString="{0:dd/MM/yyyy HH:mm}" TextAlign="TextAlign.Center" Width="120px" />
 				<RadzenDataGridColumn Property="@nameof(TaskItemDto.UpdateAt)" Title="Atualizado em" FormatString="{0:dd/MM/yyyy HH:mm}" TextAlign="TextAlign.Center" Width="120px" />
-				<RadzenDataGridColumn Context="taskItem" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+				<RadzenDataGridColumn Context="taskItem" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="80px">
 					<Template Context="taskItem">
-						<RadzenButton Icon="edit" title="Editar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => EditTask(taskItem))" @onclick:stopPropagation="true" />
-						<RadzenButton Icon="delete" title="Excluir" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => RemoveTask(taskItem))" @onclick:stopPropagation="true" />
+						<RadzenButton Icon="edit" title="Editar" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => EditTask(taskItem))" @onclick:stopPropagation="true" />
+						<RadzenButton Icon="delete" title="Excluir" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="@(args => RemoveTask(taskItem))" @onclick:stopPropagation="true" />
 					</Template>
 				</RadzenDataGridColumn>
 			</Columns>
 		</RadzenDataGrid>
 	</RadzenStack>
 }
-
+<style>
+	li span {
+		color: lightgray;
+	}
+</style>
 @code {
 	private RadzenDataGrid<TaskItemDto> DataGrid;
 	public List<TaskItemDto> TaskList { get; set; } = new();

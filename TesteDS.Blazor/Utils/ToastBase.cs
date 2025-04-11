@@ -1,4 +1,4 @@
-﻿namespace TesteDS.Blazor.Components
+﻿namespace TesteDS.Blazor.Utils
 {
     using Radzen;
 
@@ -16,7 +16,7 @@
             _notificationService.Notify(new NotificationMessage
             {
                 Severity = severity,
-                Summary = summary,
+                //Summary = summary,
                 Detail = detail,
                 Duration = duration,
                 Style = "color: white; font-weight: bold;",

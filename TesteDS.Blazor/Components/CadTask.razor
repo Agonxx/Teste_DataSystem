@@ -1,6 +1,7 @@
 ﻿@using Radzen
 @using Radzen.Blazor
 @using TesteDS.Blazor.Services.Interfaces
+@using TesteDS.Blazor.Utils
 @using TesteDS.Domain.Dtos
 @using TesteDS.Domain.Enums
 
@@ -43,14 +44,14 @@
 
 							@if (TaskObj.Status == EStatus.Pending)
 							{
-								<RadzenButton title="Iniciar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="StartTask" Style="width: 100px;" @onclick:stopPropagation="true">
+								<RadzenButton title="Iniciar" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="StartTask" Style="width: 100px;" @onclick:stopPropagation="true">
 									Iniciar
 								</RadzenButton>
 							}
 
 							@if (TaskObj.Status != EStatus.Completed)
 							{
-								<RadzenButton title="Finalizar" ButtonStyle="ButtonStyle.Dark" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="FinishTask" Style="width: 100px;" @onclick:stopPropagation="true">
+								<RadzenButton title="Finalizar" ButtonStyle="ButtonStyle.Base" Variant="Variant.Flat" Size="ButtonSize.Medium" Click="FinishTask" Style="width: 100px;" @onclick:stopPropagation="true">
 									Finalizar
 								</RadzenButton>
 							}
@@ -61,15 +62,19 @@
 		</RadzenStack>
 
 		<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.SpaceEvenly" Style="margin-top:30px">
-			<RadzenButton Click="@Close" Variant="Variant.Flat" Text="Fechar" Style="width: 120px;" />
+			<RadzenButton Click="@Close" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Base" Text="Fechar" Style="width: 120px;" />
 			@if (TaskObj.Status != EStatus.Completed)
 			{
-				<RadzenButton Click="@OnSubmit" Variant="Variant.Flat" Text="@ActionButton" Style="width: 120px;" />
+				<RadzenButton Click="@OnSubmit" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Base" Text="@ActionButton" Style="width: 120px;" />
 			}
 		</RadzenStack>
 	</RadzenStack>
 }
-
+<style>
+	label {
+		color: lightgray;
+	}
+</style>
 @code {
 	[Parameter] public TaskItemDto TaskObj { get; set; } = new();
 	public bool Initialized { get; set; }

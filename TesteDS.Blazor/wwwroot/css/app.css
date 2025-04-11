@@ -112,3 +112,29 @@ code {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+.status {
+    border-radius: 0.25rem;
+    padding: 0.25em 0.6em;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: inline-block;
+}
+
+.Pending {
+    color: #ffc107;
+    border: 1px solid #ffc107;
+    background-color: transparent;
+}
+
+.InProgress {
+    color: #17a2b8;
+    border: 1px solid #17a2b8;
+    background-color: transparent;
+}
+
+.Completed {
+    color: #28a745;
+    border: 1px solid #28a745;
+    background-color: transparent;
+}

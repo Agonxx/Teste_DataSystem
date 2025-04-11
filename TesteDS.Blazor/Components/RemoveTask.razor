@@ -1,6 +1,7 @@
 ﻿@using Radzen
 @using Radzen.Blazor
 @using TesteDS.Blazor.Services.Interfaces
+@using TesteDS.Blazor.Utils
 @using TesteDS.Domain.Dtos
 
 @inject Radzen.DialogService dialogService
@@ -25,8 +26,8 @@
 		</RadzenCard>
 
 		<RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.End" Gap="0.5rem" Style="margin-top:30px">
-			<RadzenButton Click="@Close" Variant="Variant.Flat" Text="Cancelar" Style="width: 120px;" />
-			<RadzenButton Click="@OnSubmit" Variant="Variant.Flat" Text="Excluir" Style="width: 120px;" />
+			<RadzenButton Click="@Close" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Base" Text="Cancelar" Style="width: 120px;" />
+			<RadzenButton Click="@OnSubmit" Variant="Variant.Flat" ButtonStyle="ButtonStyle.Base" Text="Excluir" Style="width: 120px;" />
 		</RadzenStack>
 	</RadzenStack>
 }

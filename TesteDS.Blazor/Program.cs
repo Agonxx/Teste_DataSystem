@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Radzen;
 using TesteDS.Blazor;
-using TesteDS.Blazor.Components;
 using TesteDS.Blazor.Services;
 using TesteDS.Blazor.Services.Interfaces;
 using TesteDS.Blazor.Utils;
