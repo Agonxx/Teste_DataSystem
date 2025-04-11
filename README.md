@@ -2,6 +2,10 @@
 
 Este projeto é uma aplicação completa para **gerenciamento de tarefas**, desenvolvida como parte de um teste técnico.  
 
+## 🎥 Demonstração em vídeo
+
+[▶️ Assista no YouTube](https://youtu.be/9Tv93k5abmE)
+
 ## 🧩 Tecnologias utilizadas:
 
 #### ⚙️ Backend (API)
